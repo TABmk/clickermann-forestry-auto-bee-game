@@ -1,0 +1,108 @@
+// coords are harcoded, take it
+#name "New Script"
+
+PRINT("================")
+PRINT("НОВАЯ ИГРА")
+PRINT("================")
+$wins = 0
+
+$red[0] = 3554774
+$red[1] = 2821995
+$red[2] = 2100048
+$red[4] = 2633375
+
+$winslot[0] = 1101
+$winslot[1] = 563
+$wincolor = 2763315
+$wincolorsec = 9803161
+
+$beex[0] = 933
+$beey[0] = 404
+
+$beex[1] = 974
+$beey[1] = 430
+
+$beex[2] = 974
+$beey[2] = 482
+
+$beex[3] = 932
+$beey[3] = 507
+
+$beex[4] = 890
+$beey[4] = 482
+
+$beex[5] = 890
+$beey[5] = 430
+
+SUB(rclc)
+   $rnd = RND(0,5)
+   LCLICK($beex[$rnd],$beey[$rnd])
+END_SUB
+
+SUB(newCycl)
+   //PRINT("new cycle")
+   LCLICK(940,450)
+   WAITMS(300)
+   LCLICK(940,450)
+   WAITMS(300)
+END_SUB
+
+
+WHILE(1)
+   IF($time < $_time_t)
+      KEYPRESS(#E)
+      WAITMS(300)
+      LCLICK(960, 530)
+      WAITMS(200)
+      RCLICK(960, 530)
+      $time = $_time_t + 240
+   END_IF
+   FOR($a=0,$a<6)
+      GETSCREEN
+      //PRINT(PXL($winslot[0],$winslot[1]))
+      IF(PXL($winslot[0],$winslot[1]) == $wincolor)
+         //PRINT("COLOR OK")
+      ELSE
+         IF(PXL($winslot[0],$winslot[1]) == $wincolorsec)
+            //PRINT("COLOR OK2")
+         ELSE
+            MOVE($winslot[0],$winslot[1])
+            KEYPRESS(#1)
+            WAITMS(300)
+            MOVE(1139,555)
+            KEYPRESS(#1)
+            WAITMS(300)
+            newCycl()
+            $wins = $wins + 1
+            PRINT("НОВАЯ ПОБЕДА #", $wins)
+         END_IF
+      ELSE
+         MOVE($winslot[0],$winslot[1])
+         KEYPRESS(#1)
+         WAITMS(300)
+         MOVE(1139,555)
+         KEYPRESS(#1)
+         WAITMS(300)
+         newCycl()
+         $wins = $wins + 1
+         PRINT("НОВАЯ ПОБЕДА #", $wins)
+      END_IF
+      
+      IF(PXL($beex[$a],$beey[$a]) == $red[0])
+         newCycl()
+      END_IF
+      IF(PXL($beex[$a],$beey[$a]) == $red[1])
+         newCycl()
+      END_IF
+      IF(PXL($beex[$a],$beey[$a]) == $red[2])
+         newCycl()
+      END_IF
+      IF(PXL($beex[$a],$beey[$a]) == $red[4])
+         newCycl()
+      END_IF
+      
+      rclc()
+      WAITMS(200)
+      
+   END_CYC
+END_CYC
